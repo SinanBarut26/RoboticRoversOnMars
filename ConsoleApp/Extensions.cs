@@ -1,40 +1,42 @@
-﻿namespace ConsoleApp
+﻿using ConsoleApp.Entities.Enums;
+using ConsoleApp.Entities.Enums.Attributes;
+using System;
+using System.Linq;
+
+namespace ConsoleApp
 {
     public static class Extensions
     {
-        //public static Direction NextDirection(this RobotInfo currentInfo, Turn turn, PlateauArea plateauArea)
-        //{
-        //    return turn == Turn.Right
-        //        ? (Direction)((currentInfo.direction.GetHashCode() + 1) % 4)
-        //        : (Direction)((currentInfo.direction.GetHashCode() + 4 - 1) % 4);
-        //}
-
-        public static RobotInfo Move(this RobotInfo current)
+        public static bool isHaveInDirectionEnum(this char outDirection)
         {
-            switch (current.direction)
+            foreach (var item in (Direction[])Enum.GetValues(typeof(Direction)))
             {
-                case Direction.Nort:
-                    current.robot_y++;
-                    break;
-                case Direction.East:
-                    current.robot_x++;
-                    break;
-                case Direction.South:
-                    current.robot_y--;
-                    break;
-                case Direction.West:
-                    current.robot_x--;
-                    break;
+                var charValue = GetAttribute<CharValue>(item).value;
+                if (charValue == outDirection) return true;
             }
-            return current;
+            return false;
         }
 
-        public static RobotInfo NextDirection(this RobotInfo currentInfo, char turn)
+        public static Direction GetDirectionEnum(this char outDirection)
         {
-            currentInfo.direction = turn == 'R'
-                ? (Direction)((currentInfo.direction.GetHashCode() + 1) % 4)
-                : (Direction)((currentInfo.direction.GetHashCode() + 4 - 1) % 4);
-            return currentInfo;
+            foreach (var item in (Direction[])Enum.GetValues(typeof(Direction)))
+            {
+                var charValue = GetAttribute<CharValue>(item).value;
+                if (charValue == outDirection) return item;
+            }
+            throw new RobotException("Sanırım yönümü bulamadım");
         }
+
+        public static TAttribute GetAttribute<TAttribute>(this Enum value)
+                where TAttribute : Attribute
+        {
+            var type = value.GetType();
+            var name = Enum.GetName(type, value);
+            return type.GetField(name) // I prefer to get attributes this way
+                .GetCustomAttributes(false)
+                .OfType<TAttribute>()
+                .SingleOrDefault();
+        }
+
     }
 }

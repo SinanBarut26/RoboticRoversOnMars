@@ -1,15 +1,15 @@
-﻿using ConsoleApp.Entities;
+﻿using ConsoleApp.Business.Interfaces;
+using ConsoleApp.Entities;
 using ConsoleApp.Entities.Enums;
 using ConsoleApp.Entities.Interface;
 using ConsoleApp.Extensions;
-using ConsoleApp.Interfaces;
+using ConsoleApp.Utilities;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace ConsoleApp.Concrete
+namespace ConsoleApp.Business.Concrete
 {
     public class SetupMission : ISetupMission
     {
@@ -37,7 +37,7 @@ namespace ConsoleApp.Concrete
         }
 
 
-        private IPlateauInfo SetupPlateau(string plateau)
+        public IPlateauInfo SetupPlateau(string plateau)
         {
             var corners = plateau.Split(" ");
             return new PlateauInfo
@@ -47,7 +47,7 @@ namespace ConsoleApp.Concrete
             };
         }
 
-        private IRobotInfo SetupRobot(string robot)
+        public IRobotInfo SetupRobot(string robot)
         {
             var infos = robot.Split(" ");
             if (infos[2].isHaveInDirectionEnum())

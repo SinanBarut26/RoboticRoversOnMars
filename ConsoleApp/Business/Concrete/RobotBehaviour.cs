@@ -1,14 +1,15 @@
-﻿using ConsoleApp.Entities.Enums;
+﻿using ConsoleApp.Business.Interfaces;
+using ConsoleApp.Entities.Enums;
 using ConsoleApp.Entities.Interface;
 using ConsoleApp.Extensions;
-using ConsoleApp.Interfaces;
+using ConsoleApp.Utilities;
 
-namespace ConsoleApp.Concrete
+namespace ConsoleApp.Business.Concrete
 {
     public class RobotBehaviour : IRobotBehaviour
     {
-        private IRobotInfo _robotInfo;
-        private IPlateauInfo _plateauInfo;
+        private readonly IRobotInfo _robotInfo;
+        private readonly IPlateauInfo _plateauInfo;
         public RobotBehaviour(IRobotInfo robotInfo, IPlateauInfo plateauInfo)
         {
             _robotInfo = robotInfo;

@@ -1,12 +1,13 @@
 ﻿using ConsoleApp.Entities.Enums;
 using ConsoleApp.Entities.Enums.Attributes;
+using ConsoleApp.Utilities;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
 namespace ConsoleApp.Extensions
 {
-    public static class Extensions
+    public static class EnumExtensions
     {
         public static bool isHaveInDirectionEnum(this char outDirection)
         {

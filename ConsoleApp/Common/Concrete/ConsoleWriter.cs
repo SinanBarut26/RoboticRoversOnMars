@@ -1,7 +1,7 @@
-﻿using ConsoleApp.Interfaces;
+﻿using ConsoleApp.Common.Interfaces;
 using System;
 
-namespace ConsoleApp.Concrete
+namespace ConsoleApp.Common.Concrete
 {
     public class ConsoleWriter : ILogWriter
     {

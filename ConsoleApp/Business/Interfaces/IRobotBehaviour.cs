@@ -1,6 +1,6 @@
 ﻿using ConsoleApp.Entities.Interface;
 
-namespace ConsoleApp.Interfaces
+namespace ConsoleApp.Business.Interfaces
 {
     public interface IRobotBehaviour
     {

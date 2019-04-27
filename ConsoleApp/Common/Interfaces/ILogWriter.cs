@@ -1,4 +1,4 @@
-﻿namespace ConsoleApp.Interfaces
+﻿namespace ConsoleApp.Common.Interfaces
 {
     public interface ILogWriter
     {

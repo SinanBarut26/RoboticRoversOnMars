@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ConsoleApp.Interfaces
+namespace ConsoleApp.Common.Interfaces
 {
     public interface ITestRead
     {

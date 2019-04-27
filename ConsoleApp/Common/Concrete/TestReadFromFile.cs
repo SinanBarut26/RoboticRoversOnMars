@@ -1,8 +1,8 @@
-﻿using ConsoleApp.Interfaces;
+﻿using ConsoleApp.Common.Interfaces;
 using System.Collections.Generic;
 using System.IO;
 
-namespace ConsoleApp.Concrete
+namespace ConsoleApp.Common.Concrete
 {
     public class TestReadFromFile : ITestRead
     {

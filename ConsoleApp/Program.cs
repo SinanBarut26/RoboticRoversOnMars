@@ -1,8 +1,11 @@
-﻿using ConsoleApp.Concrete;
+﻿using ConsoleApp.Business.Concrete;
+using ConsoleApp.Business.Interfaces;
+using ConsoleApp.Common.Concrete;
+using ConsoleApp.Common.Interfaces;
 using ConsoleApp.Entities.Interface;
-using ConsoleApp.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ConsoleApp
 {
@@ -14,9 +17,12 @@ namespace ConsoleApp
 
             ITestRead testInput = new TestReadFromFile();
             var input = testInput.Read("../../../../Test/input_001.txt");
+            var output = testInput.Read("../../../../Test/output_001.txt");
 
             ISetupMission setupMission = new SetupMission();
             setupMission.SetupPlateauAndRobot(input, out IPlateauInfo plateauInfo, out List<IRobotContact> robotContacts);
+            var acceptablePositionsOfRobot = output.Select(x => setupMission.SetupRobot(x)).ToList();
+
 
             foreach (var robotContact in robotContacts)
             {
@@ -32,10 +38,21 @@ namespace ConsoleApp
                     else
                         robotBehaviour.Move();
                 }
-
+                writer.Write(Environment.NewLine);
                 writer.Write($"Son olarak durduğum konum");
                 writer.Write($"x:{robotContact.robotInfo.robot_x}  y:{robotContact.robotInfo.robot_y}  d:{robotContact.robotInfo.direction}");
-                writer.Write(Environment.NewLine + Environment.NewLine);
+                if (acceptablePositionsOfRobot.First().Equals(robotContact.robotInfo))
+                {
+                    acceptablePositionsOfRobot.RemoveAt(0);
+                    writer.Write("Görev başarılı");
+                }
+                else
+                {
+                    writer.Write("Beklenen konuma ulaşamadım");
+                }
+
+                writer.Write("-----------------------------------------------------------");
+                writer.Write(Environment.NewLine);
 
             }
 

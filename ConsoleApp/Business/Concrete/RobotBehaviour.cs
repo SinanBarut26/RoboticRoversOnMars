@@ -6,6 +6,9 @@ using ConsoleApp.Utilities;
 
 namespace ConsoleApp.Business.Concrete
 {
+    /// <summary>
+    /// Robotun sahip olduğu davranışların uygulandığı sınıf
+    /// </summary>
     public class RobotBehaviour : IRobotBehaviour
     {
         private readonly IRobotInfo _robotInfo;
@@ -15,7 +18,17 @@ namespace ConsoleApp.Business.Concrete
             _robotInfo = robotInfo;
             _plateauInfo = plateauInfo;
         }
-        public IRobotInfo ChangeDirection(char turn)
+
+        public IRobotInfo NextMove(char directive)
+        {
+            if (directive == 'R' || directive == 'L')
+                return ChangeDirection(directive);
+            else if (directive == 'M')
+                return Move();
+            return _robotInfo;
+        }
+
+        private IRobotInfo ChangeDirection(char turn)
         {
             _robotInfo.direction = turn == 'R'
                  ? (Direction)((_robotInfo.direction.GetHashCode() + 1) % 4)
@@ -23,7 +36,7 @@ namespace ConsoleApp.Business.Concrete
             return _robotInfo;
         }
 
-        public IRobotInfo Move()
+        private IRobotInfo Move()
         {
             switch (_robotInfo.direction)
             {
@@ -51,9 +64,6 @@ namespace ConsoleApp.Business.Concrete
             return _robotInfo;
         }
 
-        public IRobotContact NextMove()
-        {
-            throw new System.NotImplementedException();
-        }
+
     }
 }

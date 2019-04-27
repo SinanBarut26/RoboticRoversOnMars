@@ -2,10 +2,11 @@
 
 namespace ConsoleApp.Business.Interfaces
 {
+    /// <summary>
+    /// Robotun sahip olduğu davranışların uygulanması için oluşturulan interface
+    /// </summary>
     public interface IRobotBehaviour
     {
-        IRobotContact NextMove();
-        IRobotInfo Move();
-        IRobotInfo ChangeDirection(char turn);
+        IRobotInfo NextMove(char direction);
     }
 }

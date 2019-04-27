@@ -11,6 +11,10 @@ using System.Text.RegularExpressions;
 
 namespace ConsoleApp.Business.Concrete
 {
+    /// <summary>
+    /// Robotun Mars üzerindeki görevine ilişkin bilgilerin yüklendiği kısım
+    /// Örn: Yüzey bilgisi, Robotun konumu ve gideceği rota bilgisi
+    /// </summary>
     public class SetupMission : ISetupMission
     {
         public void SetupPlateauAndRobot(List<string> input, out IPlateauInfo plateauInfo, out List<IRobotContact> robotContacts)

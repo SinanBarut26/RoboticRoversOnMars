@@ -1,77 +1,44 @@
 ﻿using ConsoleApp.Concrete;
-using ConsoleApp.Entities.Concrete;
-using ConsoleApp.Entities.Enums;
 using ConsoleApp.Entities.Interface;
 using ConsoleApp.Interfaces;
 using System;
-using System.Text.RegularExpressions;
+using System.Collections.Generic;
 
 namespace ConsoleApp
 {
-    class Program
+    internal class Program
     {
-        readonly static IPlateauInfo plateauInfo = new PlateauInfo
-        {
-            min_x = 0,
-            min_y = 0,
-            max_x = 5,
-            max_y = 5,
-        };
-
-        static IRobotInfo robotInfo = new RobotInfo
-        {
-            robot_x = 1,
-            robot_y = 2,
-            direction = Direction.Nort
-        };
-
-        private static string path = "LMLMLMLMM";
-        //private static string path = "LMMLMLMLMM";//RobotException
-
-
-
-
-
-        //static RobotInfo robotInfo = new RobotInfo
-        //{
-        //    robot_x = 3,
-        //    robot_y = 3,
-        //    direction = Direction.East
-        //};
-        //private static string path = "MMRMMRMRRM";
-
-
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             ILogWriter writer = new ConsoleWriter();
-            writer.Write("Marsa iniş yaptım. 'Hello World!'");
 
-            char out_direction = 'N';
-            if (!out_direction.isHaveInDirectionEnum())
-                throw new RobotException("Malesef önümü göremiyorum. Çünkü tanımladığın yön pusulamda bulunmuyor");
+            ITestInput testInput = new TestInputFromFile();
+            var input = testInput.Read("../../../../Test/input_001.txt");
 
-            Direction in_direction = out_direction.GetDirectionEnum();
+            ISetupMission setupMission = new SetupMission();
+            setupMission.SetupPlateauAndRobot(input, out IPlateauInfo plateauInfo, out List<IRobotContact> robotContacts);
 
-            var regex = new Regex("[RLM]");
-
-            IRobotBehaviour robotBehaviour = new RobotBehaviour(robotInfo, plateauInfo);
-
-            foreach (var directive in path)
+            foreach (var robotContact in robotContacts)
             {
-                if (!regex.IsMatch(directive.ToString()))
-                    throw new RobotException("Tanımlayamadığım bazı hareketler mevcut. Yeniden gözden geçirebilir misin?");
+                IRobotBehaviour robotBehaviour = new RobotBehaviour(robotContact.robotInfo, plateauInfo);
+                writer.Write("Marsa iniş yaptım. 'Hello World!'");
+                writer.Write($"Başlangıç konumum");
+                writer.Write($"x:{robotContact.robotInfo.robot_x}  y:{robotContact.robotInfo.robot_y}  d:{robotContact.robotInfo.direction}");
 
-                writer.Write($"x:{robotInfo.robot_x}  y:{robotInfo.robot_y}  d:{robotInfo.direction}");
+                foreach (var directive in robotContact.route)
+                {
+                    if (directive == 'R' || directive == 'L')
+                        robotBehaviour.ChangeDirection(directive);
+                    else
+                        robotBehaviour.Move();
+                }
 
-                if (directive == 'R' || directive == 'L')
-                    robotBehaviour.ChangeDirection(directive);
-                else
-                    robotBehaviour.Move();
+                writer.Write($"Son olarak durduğum konum");
+                writer.Write($"x:{robotContact.robotInfo.robot_x}  y:{robotContact.robotInfo.robot_y}  d:{robotContact.robotInfo.direction}");
+                writer.Write(Environment.NewLine + Environment.NewLine);
 
             }
 
-            writer.Write($"Son olarak durduğum konum");
-            writer.Write($"x:{robotInfo.robot_x}  y:{robotInfo.robot_y}  d:{robotInfo.direction}");
             Console.ReadLine();
         }
     }

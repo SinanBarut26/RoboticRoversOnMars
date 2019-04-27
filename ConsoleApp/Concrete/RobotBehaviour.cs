@@ -1,5 +1,6 @@
 ﻿using ConsoleApp.Entities.Enums;
 using ConsoleApp.Entities.Interface;
+using ConsoleApp.Extensions;
 using ConsoleApp.Interfaces;
 
 namespace ConsoleApp.Concrete
@@ -27,26 +28,31 @@ namespace ConsoleApp.Concrete
             {
                 case Direction.Nort:
                     if (_robotInfo.robot_y >= _plateauInfo.max_y)
-                        throw new RobotException("Sanırım bir kayaya çarptım");
+                        throw new RobotException(ExceptionEnum.OutOfPlateau.GetExceptionEnum());
                     _robotInfo.robot_y++;
                     break;
                 case Direction.East:
                     if (_robotInfo.robot_x >= _plateauInfo.max_x)
-                        throw new RobotException("Sanırım bir kayaya çarptım");
+                        throw new RobotException(ExceptionEnum.OutOfPlateau.GetExceptionEnum());
                     _robotInfo.robot_x++;
                     break;
                 case Direction.South:
                     if (_robotInfo.robot_y <= _plateauInfo.min_y)
-                        throw new RobotException("Sanırım bir kayaya çarptım");
+                        throw new RobotException(ExceptionEnum.OutOfPlateau.GetExceptionEnum());
                     _robotInfo.robot_y--;
                     break;
                 case Direction.West:
                     if (_robotInfo.robot_x <= _plateauInfo.min_x)
-                        throw new RobotException("Sanırım bir kayaya çarptım");
+                        throw new RobotException(ExceptionEnum.OutOfPlateau.GetExceptionEnum());
                     _robotInfo.robot_x--;
                     break;
             }
             return _robotInfo;
+        }
+
+        public IRobotContact NextMove()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

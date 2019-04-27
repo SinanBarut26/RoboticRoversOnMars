@@ -1,9 +1,10 @@
 ﻿using ConsoleApp.Entities.Enums;
 using ConsoleApp.Entities.Enums.Attributes;
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
-namespace ConsoleApp
+namespace ConsoleApp.Extensions
 {
     public static class Extensions
     {
@@ -11,7 +12,7 @@ namespace ConsoleApp
         {
             foreach (var item in (Direction[])Enum.GetValues(typeof(Direction)))
             {
-                var charValue = GetAttribute<CharValue>(item).value;
+                var charValue = item.GetAttribute<CharValue>().value;
                 if (charValue == outDirection) return true;
             }
             return false;
@@ -21,10 +22,34 @@ namespace ConsoleApp
         {
             foreach (var item in (Direction[])Enum.GetValues(typeof(Direction)))
             {
-                var charValue = GetAttribute<CharValue>(item).value;
+                var charValue = item.GetAttribute<CharValue>().value;
                 if (charValue == outDirection) return item;
             }
             throw new RobotException("Sanırım yönümü bulamadım");
+        }
+        public static bool isHaveInDirectionEnum(this string outDirection)
+        {
+            foreach (var item in (Direction[])Enum.GetValues(typeof(Direction)))
+            {
+                var charValue = item.GetAttribute<CharValue>().value.ToString();
+                if (charValue == outDirection) return true;
+            }
+            return false;
+        }
+
+        public static Direction GetDirectionEnum(this string outDirection)
+        {
+            foreach (var item in (Direction[])Enum.GetValues(typeof(Direction)))
+            {
+                var charValue = item.GetAttribute<CharValue>().value.ToString();
+                if (charValue == outDirection) return item;
+            }
+            throw new RobotException("Sanırım yönümü bulamadım");
+        }
+
+        public static string GetExceptionEnum(this ExceptionEnum value)
+        {
+            return $"#{value.GetHashCode()}# : {value.GetAttribute<DisplayAttribute>().Name}";
         }
 
         public static TAttribute GetAttribute<TAttribute>(this Enum value)
@@ -37,6 +62,5 @@ namespace ConsoleApp
                 .OfType<TAttribute>()
                 .SingleOrDefault();
         }
-
     }
 }

@@ -27,8 +27,7 @@ namespace ConsoleApp
             foreach (var robotContact in robotContacts)
             {
                 IRobotBehaviour robotBehaviour = new RobotBehaviour(robotContact.robotInfo, plateauInfo);
-                writer.Write("Marsa iniş yaptım. 'Hello World!'");
-                writer.Write($"Başlangıç konumum");
+                writer.WriteLine("Marsa iniş yaptım. 'Hello World!'");
                 writer.Write($"x:{robotContact.robotInfo.robot_x}  y:{robotContact.robotInfo.robot_y}  d:{robotContact.robotInfo.direction}");
 
                 foreach (var directive in robotContact.route)
@@ -38,21 +37,19 @@ namespace ConsoleApp
                     else
                         robotBehaviour.Move();
                 }
-                writer.Write(Environment.NewLine);
-                writer.Write($"Son olarak durduğum konum");
-                writer.Write($"x:{robotContact.robotInfo.robot_x}  y:{robotContact.robotInfo.robot_y}  d:{robotContact.robotInfo.direction}");
+                writer.Write("   =>   ");
+                writer.WriteLine($"x:{robotContact.robotInfo.robot_x}  y:{robotContact.robotInfo.robot_y}  d:{robotContact.robotInfo.direction}");
                 if (acceptablePositionsOfRobot.First().Equals(robotContact.robotInfo))
                 {
                     acceptablePositionsOfRobot.RemoveAt(0);
-                    writer.Write("Görev başarılı");
+                    writer.WriteLine("Görev başarılı");
                 }
                 else
                 {
-                    writer.Write("Beklenen konuma ulaşamadım");
+                    writer.WriteLine("Beklenen konuma ulaşamadım");
                 }
 
-                writer.Write("-----------------------------------------------------------");
-                writer.Write(Environment.NewLine);
+                writer.WriteLine("-----------------------------------------------------------" + Environment.NewLine);
 
             }
 

@@ -12,7 +12,7 @@ namespace ConsoleApp
         {
             ILogWriter writer = new ConsoleWriter();
 
-            ITestInput testInput = new TestInputFromFile();
+            ITestRead testInput = new TestReadFromFile();
             var input = testInput.Read("../../../../Test/input_001.txt");
 
             ISetupMission setupMission = new SetupMission();

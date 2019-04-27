@@ -2,7 +2,7 @@
 
 namespace ConsoleApp.Interfaces
 {
-    public interface ITestInput
+    public interface ITestRead
     {
         List<string> Read(string connectionString);
     }

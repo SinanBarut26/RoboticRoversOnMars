@@ -4,18 +4,18 @@ using System.IO;
 
 namespace ConsoleApp.Concrete
 {
-    public class TestInputFromFile : ITestInput
+    public class TestReadFromFile : ITestRead
     {
         public List<string> Read(string connectionString)
         {
-            var sampleInput = new List<string>();
+            var inputs = new List<string>();
             using (var sR = new StreamReader(connectionString))
             {
                 while (!sR.EndOfStream)
                 {
-                    sampleInput.Add(sR.ReadLine());
+                    inputs.Add(sR.ReadLine());
                 }
-                return sampleInput;
+                return inputs;
             }
         }
     }

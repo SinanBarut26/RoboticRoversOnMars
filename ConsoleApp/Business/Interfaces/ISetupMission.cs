@@ -5,7 +5,7 @@ namespace ConsoleApp.Business.Interfaces
 {
     public interface ISetupMission
     {
-        void SetupPlateauAndRobot(List<string> input,
+        void SetupPlateauAndRobot(IList<string> input,
             out IPlateauInfo plateauInfo, out List<IRobotContact> robotContacts);
         IPlateauInfo SetupPlateau(string plateau);
         IRobotInfo SetupRobot(string robot);

@@ -17,7 +17,7 @@ namespace ConsoleApp.Business.Concrete
     /// </summary>
     public class SetupMission : ISetupMission
     {
-        public void SetupPlateauAndRobot(List<string> input, out IPlateauInfo plateauInfo, out List<IRobotContact> robotContacts)
+        public void SetupPlateauAndRobot(IList<string> input, out IPlateauInfo plateauInfo, out List<IRobotContact> robotContacts)
         {
             robotContacts = new List<IRobotContact>();
             plateauInfo = SetupPlateau(input.First().Trim());

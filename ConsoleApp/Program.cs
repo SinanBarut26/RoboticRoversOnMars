@@ -18,13 +18,13 @@ namespace ConsoleApp
         private static readonly string folderPath = "../../../../Test/";
         private static readonly string inputPrefix = "input";
         private static readonly string outputPrefix = "output";
+        private static readonly ILogWriter writer = new ConsoleWriter();
+        private static readonly ITestRead testInput = new TestReadFromFile();
+
         private static void Main(string[] args)
         {
-            ILogWriter writer = new ConsoleWriter();
             try
             {
-                ITestRead testInput = new TestReadFromFile();
-
                 var inputFiles = Directory.EnumerateFiles(folderPath, $"{inputPrefix}*.txt", SearchOption.AllDirectories);
 
                 foreach (var inputFile in inputFiles)
@@ -37,62 +37,76 @@ namespace ConsoleApp
                     var input = testInput.Read(inputFile);
                     var output = testInput.Read(inputFile.Replace(inputPrefix, outputPrefix));
 
-                    ISetupMission setupMission = new SetupMission();
-                    setupMission.SetupPlateauAndRobot(input,
-                        out IPlateauInfo plateauInfo,
-                        out List<IRobotContact> robotContacts);
-
-                    var acceptablePositionsOfRobot = output.Select(x => setupMission.SetupRobot(x)).ToList();
-                    if (robotContacts.Count != acceptablePositionsOfRobot.Count)
-                        throw new RobotException(ExceptionEnum.InputAndOutputNotEqual.GetExceptionEnum());
-
-                    foreach (var robotContact in robotContacts)
-                    {
-                        IRobotBehaviour robotBehaviour = new RobotBehaviour(robotContact.robotInfo, plateauInfo);
-                        writer.WriteLine("Marsa iniş yaptım. 'Hello World!'");
-                        writer.Write($"x:{robotContact.robotInfo.robot_x}  " +
-                            $"y:{robotContact.robotInfo.robot_y}  " +
-                            $"d:{robotContact.robotInfo.direction}");
-
-                        foreach (var directive in robotContact.route)
-                            robotBehaviour.NextMove(directive);
-
-                        writer.WriteLine($"   =>   " +
-                            $"x:{robotContact.robotInfo.robot_x}  " +
-                            $"y:{robotContact.robotInfo.robot_y}  " +
-                            $"d:{robotContact.robotInfo.direction}");
-
-                        if (acceptablePositionsOfRobot.First().Equals(robotContact.robotInfo))
-                        {
-                            acceptablePositionsOfRobot.RemoveAt(0);
-                            writer.WriteLine("Görev başarılı");
-                        }
-                        else
-                        {
-                            writer.WriteLine("Beklenen konuma ulaşamadım");
-                        }
-
-                        writer.WriteLine("-----------------------------------------------------------");
-                    }
+                    SetupMissionAndMove(input, output);
                 }
             }
             catch (RobotException re)
             {
-                writer.WriteLine(default);
-                writer.WriteLine(re.Message);
-                writer.WriteLine(default);
+                writer.WriteLine(Environment.NewLine
+                    + re.Message
+                    + Environment.NewLine);
             }
             catch (Exception)
             {
-                writer.WriteLine(default);
-                writer.WriteLine(ExceptionEnum.ThrowException.GetExceptionEnum());
-                writer.WriteLine(default);
+                writer.WriteLine(Environment.NewLine
+                    + ExceptionEnum.ThrowException.GetExceptionEnum()
+                    + Environment.NewLine);
             }
             Console.ReadLine();
         }
+
+        private static void SetupMissionAndMove(IList<string> input, IList<string> output)
+        {
+            ISetupMission setupMission = new SetupMission();
+            setupMission.SetupPlateauAndRobot(input,
+                out IPlateauInfo plateauInfo,
+                out List<IRobotContact> robotContacts);
+
+            var acceptablePositionsOfRobot = output.Select(x => setupMission.SetupRobot(x)).ToList();
+            if (robotContacts.Count != acceptablePositionsOfRobot.Count)
+                throw new RobotException(ExceptionEnum.InputAndOutputNotEqual.GetExceptionEnum());
+
+            var i = 0;
+            foreach (var robotContact in robotContacts)
+            {
+                RobotMove(robotContact, plateauInfo);
+
+                IsMissionSuccess(acceptablePositionsOfRobot[i++], robotContact.robotInfo);
+            }
+        }
+
+
+        private static void RobotMove(IRobotContact robotContact, IPlateauInfo plateauInfo)
+        {
+            IRobotBehaviour robotBehaviour = new RobotBehaviour(robotContact.robotInfo, plateauInfo);
+
+            writer.WriteLine("Marsa iniş yaptım. 'Hello World!'");
+
+            WriteRobotCurrentPosition(robotContact.robotInfo, "Start");
+
+            foreach (var directive in robotContact.route)
+                robotBehaviour.NextMove(directive);
+
+            WriteRobotCurrentPosition(robotContact.robotInfo, "End");
+
+        }
+
+        private static void IsMissionSuccess(IRobotInfo current, IRobotInfo expected)
+        {
+            if (current.Equals(expected))
+                writer.WriteLine("Görev başarılı");
+            else
+                writer.WriteLine("Beklenen konuma ulaşamadım");
+
+            writer.WriteLine("-----------------------------------------------------------");
+        }
+
+        private static void WriteRobotCurrentPosition(IRobotInfo currentRobot, string startOrEnd)
+        {
+            writer.WriteLine($"{startOrEnd}\t =>\t" +
+                $"x:{currentRobot.robot_x}  " +
+                $"y:{currentRobot.robot_y}  " +
+                $"d:{currentRobot.direction}");
+        }
     }
-
-
-
-
 }

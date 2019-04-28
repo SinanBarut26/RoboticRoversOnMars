@@ -25,7 +25,7 @@ namespace ConsoleApp.Business.Concrete
                 return ChangeDirection(directive);
             else if (directive == 'M')
                 return Move();
-            return _robotInfo;
+            throw new RobotException(ExceptionEnum.WrongRoute.GetExceptionEnum());
         }
 
         private IRobotInfo ChangeDirection(char turn)

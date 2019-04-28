@@ -44,11 +44,20 @@ namespace ConsoleApp.Business.Concrete
         public IPlateauInfo SetupPlateau(string plateau)
         {
             var corners = plateau.Split(" ");
-            return new PlateauInfo
-            {
-                max_x = Convert.ToInt32(corners[0]),
-                max_y = Convert.ToInt32(corners[1])
-            };
+            var plateauInfo = new PlateauInfo();
+
+            int.TryParse(corners[0], out int max_x);
+            int.TryParse(corners[1], out int max_y);
+
+            if (max_x > 0 && max_y > 0)
+                return new PlateauInfo
+                {
+                    max_x = Convert.ToInt32(max_x),
+                    max_y = Convert.ToInt32(max_y)
+                };
+
+            throw new RobotException(ExceptionEnum.PlateauHasNotAcceptableCoordinate.GetExceptionEnum());
+
         }
 
         public IRobotInfo SetupRobot(string robot)

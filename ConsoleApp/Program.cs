@@ -6,6 +6,8 @@ using ConsoleApp.Entities.Enums;
 using ConsoleApp.Entities.Interface;
 using ConsoleApp.Extensions;
 using ConsoleApp.Utilities;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -15,27 +17,45 @@ namespace ConsoleApp
 {
     internal class Program
     {
-        private static readonly string folderPath = "../../../../Test/";
-        private static readonly string inputPrefix = "input";
-        private static readonly string outputPrefix = "output";
-        private static readonly ILogWriter writer = new ConsoleWriter();
-        private static readonly ITestRead testInput = new TestReadFromFile();
+        private static ILogWriter writer;
+        private static ITestRead testInput;
 
         private static void Main(string[] args)
         {
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+
+            IConfiguration configuration = builder.Build();
+
+            RegisterServices(configuration);
+
+
+            Start();
+
+
+            Console.ReadLine();
+        }
+        private static void RegisterServices(IConfiguration configuration)
+
+        {
+            var serviceProvider = new ServiceCollection()
+                .AddSingleton<IConfiguration>(configuration)
+                .AddSingleton<ILogWriter, ConsoleWriter>()
+                .AddSingleton<ITestRead, TestReadFromFile>()
+                .BuildServiceProvider();
+
+            writer = serviceProvider.GetService<ILogWriter>();
+            testInput = serviceProvider.GetService<ITestRead>();
+        }
+        public static void Start()
+        {
             try
             {
-                var inputFiles = Directory.EnumerateFiles(folderPath, $"{inputPrefix}*.txt", SearchOption.AllDirectories);
-
-                foreach (var inputFile in inputFiles)
+                foreach (var inputFile in testInput.GetInputsName())
                 {
-                    string outputFile = inputFile.Replace(inputPrefix, outputPrefix);
-
-                    if (!File.Exists(outputFile))
-                        throw new RobotException(ExceptionEnum.OutputFileNotFound.GetExceptionEnum());
-
-                    var input = testInput.Read(inputFile);
-                    var output = testInput.Read(inputFile.Replace(inputPrefix, outputPrefix));
+                    var input = testInput.ReadInput(inputFile);
+                    var output = testInput.ReadOutput(inputFile);
 
                     SetupMissionAndMove(input, output);
                 }
@@ -52,7 +72,6 @@ namespace ConsoleApp
                     + ExceptionEnum.ThrowException.GetExceptionEnum()
                     + Environment.NewLine);
             }
-            Console.ReadLine();
         }
 
         private static void SetupMissionAndMove(IList<string> input, IList<string> output)

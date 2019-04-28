@@ -4,6 +4,8 @@ namespace ConsoleApp.Common.Interfaces
 {
     public interface ITestRead
     {
-        List<string> Read(string connectionString);
+        IEnumerable<string> GetInputsName();
+        IList<string> ReadInput(string inputName);
+        IList<string> ReadOutput(string inputName);
     }
 }

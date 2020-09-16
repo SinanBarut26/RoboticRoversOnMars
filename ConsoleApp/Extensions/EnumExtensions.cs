@@ -11,7 +11,7 @@ namespace ConsoleApp.Extensions
     {
         public static bool isHaveInDirectionEnum(this char outDirection)
         {
-            foreach (var item in (Direction[])Enum.GetValues(typeof(Direction)))
+            foreach (var item in (RobotDirection[])Enum.GetValues(typeof(RobotDirection)))
             {
                 var charValue = item.GetAttribute<CharValue>().value;
                 if (charValue == outDirection) return true;
@@ -19,9 +19,9 @@ namespace ConsoleApp.Extensions
             return false;
         }
 
-        public static Direction GetDirectionEnum(this char outDirection)
+        public static RobotDirection GetDirectionEnum(this char outDirection)
         {
-            foreach (var item in (Direction[])Enum.GetValues(typeof(Direction)))
+            foreach (var item in (RobotDirection[])Enum.GetValues(typeof(RobotDirection)))
             {
                 var charValue = item.GetAttribute<CharValue>().value;
                 if (charValue == outDirection) return item;
@@ -30,7 +30,7 @@ namespace ConsoleApp.Extensions
         }
         public static bool isHaveInDirectionEnum(this string outDirection)
         {
-            foreach (var item in (Direction[])Enum.GetValues(typeof(Direction)))
+            foreach (var item in (RobotDirection[])Enum.GetValues(typeof(RobotDirection)))
             {
                 var charValue = item.GetAttribute<CharValue>().value.ToString();
                 if (charValue == outDirection) return true;
@@ -38,9 +38,9 @@ namespace ConsoleApp.Extensions
             return false;
         }
 
-        public static Direction GetDirectionEnum(this string outDirection)
+        public static RobotDirection GetDirectionEnum(this string outDirection)
         {
-            foreach (var item in (Direction[])Enum.GetValues(typeof(Direction)))
+            foreach (var item in (RobotDirection[])Enum.GetValues(typeof(RobotDirection)))
             {
                 var charValue = item.GetAttribute<CharValue>().value.ToString();
                 if (charValue == outDirection) return item;

@@ -1,6 +1,5 @@
 ﻿using ConsoleApp.Entities.Enums;
 using ConsoleApp.Entities.Interface;
-using System;
 
 namespace ConsoleApp.Entities
 {
@@ -8,7 +7,7 @@ namespace ConsoleApp.Entities
     {
         public int robot_x { get; set; }
         public int robot_y { get; set; }
-        public Direction direction { get; set; }
+        public RobotDirection direction { get; set; }
 
         public override bool Equals(object obj)
         {

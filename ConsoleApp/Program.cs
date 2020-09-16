@@ -2,6 +2,7 @@
 using ConsoleApp.Business.Interfaces;
 using ConsoleApp.Common.Concrete;
 using ConsoleApp.Common.Interfaces;
+using ConsoleApp.Entities;
 using ConsoleApp.Entities.Enums;
 using ConsoleApp.Entities.Interface;
 using ConsoleApp.Extensions;
@@ -22,6 +23,17 @@ namespace ConsoleApp
 
         private static void Main(string[] args)
         {
+            // try
+            // {
+            //     StartCoding();
+            // }
+            // catch (Exception ex)
+            // {
+            //     Console.WriteLine(ex.Message);
+            // }
+
+
+
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
@@ -36,6 +48,7 @@ namespace ConsoleApp
 
             Console.ReadLine();
         }
+
         private static void RegisterServices(IConfiguration configuration)
 
         {
@@ -48,6 +61,7 @@ namespace ConsoleApp
             writer = serviceProvider.GetService<ILogWriter>();
             testInput = serviceProvider.GetService<ITestRead>();
         }
+
         public static void Start()
         {
             try
@@ -66,8 +80,9 @@ namespace ConsoleApp
                     + re.Message
                     + Environment.NewLine);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                writer.WriteLine(ex.Message);
                 writer.WriteLine(Environment.NewLine
                     + ExceptionEnum.ThrowException.GetExceptionEnum()
                     + Environment.NewLine);

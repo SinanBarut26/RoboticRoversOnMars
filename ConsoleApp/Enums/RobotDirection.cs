@@ -2,7 +2,7 @@
 
 namespace ConsoleApp.Entities.Enums
 {
-    public enum Direction
+    public enum RobotDirection
     {
         [CharValue('N')]
         Nort = 0,

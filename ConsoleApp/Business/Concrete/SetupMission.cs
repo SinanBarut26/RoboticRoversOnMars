@@ -30,7 +30,7 @@ namespace ConsoleApp.Business.Concrete
                 var robotInfo = SetupRobot(input[i].Trim());
                 string routeInfo = string.Empty;
                 //Robot için rota verilmediyse rota boş string olur
-                routeInfo = i < inputCount - 1 ? SetupRobotRoute(input[++i].Trim()) : "";
+                routeInfo = i < inputCount - 1 ? SetupRobotRoute(input[++i].Trim().ToUpper()) : "";
 
                 robotContacts.Add(new RobotContact
                 {
@@ -46,8 +46,8 @@ namespace ConsoleApp.Business.Concrete
             var corners = plateau.Split(" ");
             var plateauInfo = new PlateauInfo();
 
-            int.TryParse(corners[0], out int max_x);
-            int.TryParse(corners[1], out int max_y);
+            if (!int.TryParse(corners[0], out int max_x) || !int.TryParse(corners[1], out int max_y))
+                throw new RobotException(ExceptionEnum.PlateauHasNotAcceptableCoordinate.GetExceptionEnum());
 
             if (max_x > 0 && max_y > 0)
                 return new PlateauInfo
@@ -57,23 +57,23 @@ namespace ConsoleApp.Business.Concrete
                 };
 
             throw new RobotException(ExceptionEnum.PlateauHasNotAcceptableCoordinate.GetExceptionEnum());
-
         }
 
         public IRobotInfo SetupRobot(string robot)
         {
             var infos = robot.Split(" ");
-            if (infos[2].isHaveInDirectionEnum())
-            {
-                return new RobotInfo
-                {
-                    robot_x = Convert.ToInt32(infos[0]),
-                    robot_y = Convert.ToInt32(infos[1]),
-                    direction = infos[2].GetDirectionEnum()
-                };
-            }
+            if (!int.TryParse(infos[0], out int x) || !int.TryParse(infos[1], out int y))
+                throw new RobotException(ExceptionEnum.PlateauHasNotAcceptableCoordinate.GetExceptionEnum());
 
-            throw new RobotException(ExceptionEnum.WrongDirection.GetExceptionEnum());
+            if (!infos[2].isHaveInDirectionEnum())
+                throw new RobotException(ExceptionEnum.WrongDirection.GetExceptionEnum());
+
+            return new RobotInfo
+            {
+                robot_x = x,
+                robot_y = y,
+                direction = infos[2].GetDirectionEnum()
+            };
         }
 
         private string SetupRobotRoute(string route)

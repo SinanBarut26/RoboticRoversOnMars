@@ -31,8 +31,8 @@ namespace ConsoleApp.Business.Concrete
         private IRobotInfo ChangeDirection(char turn)
         {
             _robotInfo.direction = turn == 'R'
-                 ? (Direction)((_robotInfo.direction.GetHashCode() + 1) % 4)
-                 : (Direction)((_robotInfo.direction.GetHashCode() + 4 - 1) % 4);
+                 ? (RobotDirection)((_robotInfo.direction.GetHashCode() + 1) % 4)
+                 : (RobotDirection)((_robotInfo.direction.GetHashCode() + 4 - 1) % 4);
             return _robotInfo;
         }
 
@@ -40,22 +40,22 @@ namespace ConsoleApp.Business.Concrete
         {
             switch (_robotInfo.direction)
             {
-                case Direction.Nort:
+                case RobotDirection.Nort:
                     if (_robotInfo.robot_y >= _plateauInfo.max_y)
                         throw new RobotException(ExceptionEnum.OutOfPlateau.GetExceptionEnum());
                     _robotInfo.robot_y++;
                     break;
-                case Direction.East:
+                case RobotDirection.East:
                     if (_robotInfo.robot_x >= _plateauInfo.max_x)
                         throw new RobotException(ExceptionEnum.OutOfPlateau.GetExceptionEnum());
                     _robotInfo.robot_x++;
                     break;
-                case Direction.South:
+                case RobotDirection.South:
                     if (_robotInfo.robot_y <= _plateauInfo.min_y)
                         throw new RobotException(ExceptionEnum.OutOfPlateau.GetExceptionEnum());
                     _robotInfo.robot_y--;
                     break;
-                case Direction.West:
+                case RobotDirection.West:
                     if (_robotInfo.robot_x <= _plateauInfo.min_x)
                         throw new RobotException(ExceptionEnum.OutOfPlateau.GetExceptionEnum());
                     _robotInfo.robot_x--;

@@ -6,6 +6,6 @@ namespace ConsoleApp.Entities.Interface
     {
         int robot_x { get; set; }
         int robot_y { get; set; }
-        Direction direction { get; set; }
+        RobotDirection direction { get; set; }
     }
 }

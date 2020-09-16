@@ -10,14 +10,14 @@ namespace ConsoleApp.Common.Concrete
 {
     /// <summary>
     /// Eğer Configure fonksiyonunu çalıştırmazsanız varsayılan olarak aşağıdaki değerler atanacaktır.
-    /// folderPath = "../../../../Test/"
+    /// folderPath = "Test"
     /// inputPrefix = "input"
     /// outputPrefix = "output";
     /// </summary>
     public class TestReadFromFile : ITestRead
     {
         private readonly IConfiguration _config;
-        private readonly string folderPath = "../../../../Test/";
+        private readonly string folderPath = "Test";
         private readonly string inputPrefix = "input";
         private readonly string outputPrefix = "output";
 
@@ -31,7 +31,7 @@ namespace ConsoleApp.Common.Concrete
 
         public IEnumerable<string> GetInputsName()
         {
-            return Directory.EnumerateFiles(folderPath,
+            return Directory.EnumerateFiles(Path.Combine(System.AppContext.BaseDirectory, folderPath),
                 $"{inputPrefix}*.txt",
                 SearchOption.AllDirectories);
         }

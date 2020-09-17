@@ -36,23 +36,8 @@ namespace ConsoleApp.Business.Concrete
         {
             IRobotBehaviour robotBehaviour = new RobotBehaviour(robotContact.robotInfo, plateauInfo);
 
-            // writer.WriteLine("Marsa iniş yaptım. 'Hello World!'");
-
-            // WriteRobotCurrentPosition(robotContact.robotInfo, "Start");
-
             foreach (var directive in robotContact.route)
                 robotBehaviour.NextMove(directive);
-
-            // WriteRobotCurrentPosition(robotContact.robotInfo, "End");
-
         }
-
-        // private void WriteRobotCurrentPosition(IRobotInfo currentRobot, string startOrEnd)
-        // {
-        //     writer.WriteLine($"{startOrEnd}\t =>\t" +
-        //         $"x:{currentRobot.robot_x}  " +
-        //         $"y:{currentRobot.robot_y}  " +
-        //         $"d:{currentRobot.direction}");
-        // }
     }
 }
